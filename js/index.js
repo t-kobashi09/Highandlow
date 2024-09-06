@@ -1,4 +1,10 @@
+let deckId;
+let dealerHand = [];
+let playerHand = [];
+let score = 0;
+
 //スタート画面
+
 //シャッフル機能
 //10渡す機能
 //カード表示
