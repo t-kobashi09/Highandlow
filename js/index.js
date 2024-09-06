@@ -6,6 +6,11 @@ let score = 0;
 //スタート画面
 
 //シャッフル機能
+const apiUrl = "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
+document.getElementById("game").addEventListener("click", async () => {
+    
+    });
+
 //10渡す機能
 //カード表示
 //カード選択
