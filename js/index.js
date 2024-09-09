@@ -68,8 +68,14 @@ function selectCard(cardElement) {
     const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
     selectedCardsDiv.appendChild(clonedCard);
 
-    // カードの値をスートごとに合計値に追加
-    updateTotals(cardElement.dataset.suit, cardElement.dataset.value);
+    // 場から選択されたカードを削除
+    cardElement.remove();
+}
+
+function selectBacks(cardElement){
+    const drawnCardsDiv = document.getElementById('card-area');
+    const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
+    selectedCardsDiv.appendChild(clonedCard);
 
     // 場から選択されたカードを削除
     cardElement.remove();
@@ -86,30 +92,4 @@ function getCardValue(value) {
     if (value === 'ACE') return 1;
     if (value === 'JACK' || value === 'QUEEN' || value === 'KING') return 10;
     return parseInt(value);
-}
-
-// スートごとの合計値を更新
-function updateTotals(suit, value) {
-    const cardValue = getCardValue(value);
-
-    switch (suit) {
-        case 'HEARTS':
-            totalHearts += cardValue;
-            document.getElementById('hearts-total').textContent = totalHearts;
-            break;
-        case 'DIAMONDS':
-            totalDiamonds += cardValue;
-            document.getElementById('diamonds-total').textContent = totalDiamonds;
-            break;
-        case 'CLUBS':
-            totalClubs += cardValue;
-            document.getElementById('clubs-total').textContent = totalClubs;
-            break;
-        case 'SPADES':
-            totalSpades += cardValue;
-            document.getElementById('spades-total').textContent = totalSpades;
-            break;
-        default:
-            break;
-    }
 }
