@@ -10,25 +10,6 @@ let totalSpades = 0;
 //スタート画面
 
 //シャッフル機能
-
-//10渡す機能
-
-const deck ="https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=20";
-document.getElementById("game").addEventListener("click", async () => {
-    dealer
-    player
-});
-
-
-//カード表示
-//カード選択
-//宣言
-//カードを表に
-//結果
-//連勝を追加
-//ドローなら山札を追加
-
-
 const deckApiUrl = "https://deckofcardsapi.com/api/deck";
 
 // ゲーム開始時にデッキを取得
@@ -39,7 +20,7 @@ window.onload = () => {
             deckId = data.deck_id;
         });
 };
-
+//10渡す機能
 // 山札からカードを引く
 function drawCards() {
     fetch(`${deckApiUrl}/${deckId}/draw/?count=10`)
@@ -62,6 +43,15 @@ function drawCards() {
         });
 }
 
+const deck ="https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=20";
+document.getElementById("game").addEventListener("click", async () => {
+    dealer
+    player
+});
+
+
+//カード表示
+//カード選択
 // カードを選択してリストに追加、場から削除
 function selectCard(cardElement) {
     const selectedCardsDiv = document.getElementById('selected-cards');
@@ -71,7 +61,6 @@ function selectCard(cardElement) {
     // 場から選択されたカードを削除
     cardElement.remove();
 }
-
 function selectBacks(cardElement){
     const drawnCardsDiv = document.getElementById('card-area');
     const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
@@ -81,9 +70,11 @@ function selectBacks(cardElement){
     cardElement.remove();
 }
 
-
-
-
+//宣言
+//カードを表に
+//結果
+//連勝を追加
+//ドローなら山札を追加
 
 
 
