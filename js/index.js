@@ -12,6 +12,14 @@ document.getElementById("game").addEventListener("click", async () => {
     });
 
 //10渡す機能
+
+const deck ="https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=20";
+document.getElementById("game").addEventListener("click", async () => {
+    dealer
+    player
+});
+
+
 //カード表示
 //カード選択
 //宣言
