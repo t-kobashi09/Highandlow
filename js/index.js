@@ -108,16 +108,6 @@ function selectCard(cardElement) {
 
     // 場から選択されたカードを削除
     cardElement.remove();
-<<<<<<< Updated upstream
-
-}
-
-
-
-
-
-
-=======
 }
 function returnCard(cardElement) {
     const drawnCardsDiv = document.getElementById('drawn-cards'); 
@@ -129,8 +119,6 @@ function returnCard(cardElement) {
     cardElement.remove();
 }
 
-
->>>>>>> Stashed changes
 //宣言
 
 //カードを表に
