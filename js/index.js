@@ -107,15 +107,13 @@ function selectCard(cardElement) {
 
     // 場から選択されたカードを削除
     cardElement.remove();
-}
-function selectBacks(cardElement){
-    const drawnCardsDiv = document.getElementById('card-area');
-    const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
-    selectedCardsDiv.appendChild(clonedCard);
 
-    // 場から選択されたカードを削除
-    cardElement.remove();
 }
+
+
+
+
+
 
 //宣言
 
