@@ -22,14 +22,21 @@ window.onload = () => {
 };
 //10渡す機能
 // 山札からカードを引く
+// カードを引く関数
 function drawCards() {
-    fetch(`${deckApiUrl}/${deckId}/draw/?count=10`)
+    fetch(`${deckApiUrl}/${deckId}/draw/?count=20`)  // 20枚引く
         .then(response => response.json())
         .then(data => {
             const drawnCardsDiv = document.getElementById('drawn-cards');
-            drawnCardsDiv.innerHTML = ''; // 以前のカードをクリア
+            drawnCardsDiv.innerHTML = ''; // 前回の表示をクリア
 
-            data.cards.forEach(card => {
+            // プレイヤーに10枚配布
+            playerHand = data.cards.slice(0, 10);
+            // ディーラーに10枚配布
+            dealerHand = data.cards.slice(10, 20);
+
+            // プレイヤーのカードを表示
+            playerHand.forEach(card => {
                 const cardImg = document.createElement('img');
                 cardImg.src = card.image;
                 cardImg.alt = `${card.value} of ${card.suit}`;
@@ -39,16 +46,56 @@ function drawCards() {
                 cardImg.onclick = () => selectCard(cardImg);
 
                 drawnCardsDiv.appendChild(cardImg);
+                
             });
-        });
+
+            // ディーラーのカードを裏向きで表示
+            const dealerDrawnCardsDiv = document.getElementById('dealer-drawn-cards');
+
+            dealerHand.forEach(card => {
+                const backImg = document.createElement('img');
+                backImg.src = "https://deckofcardsapi.com/static/img/back.png";
+                dealerDrawnCardsDiv.appendChild(backImg);
+            });
+        })
+        .catch(error => console.error('Error drawing cards:', error));
 }
 
-const deck ="https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=20";
-document.getElementById("game").addEventListener("click", async () => {
-    dealer
-    player
-});
+// ディーラーのカードを表示する関数
+function revealDealerCard() {
+    // dealerHandが正しく初期化されているか確認
+    if (!dealerHand || dealerHand.length === 0) {
+        console.error('No cards available in dealerHand');
+        return;
+    }
 
+    // ディーラーのカードを取得
+    const dealerCard = dealerHand.shift();
+    // dealerCardがundefinedでないか確認
+    if (!dealerCard) {
+        console.error('dealerCard is undefined');
+        return;
+    }
+
+    // ディーラーのカードを表示する要素
+    const dealerCardDiv = document.getElementById('dealer-card');
+    dealerCardDiv.innerHTML = ''; // 以前のカードをクリア
+
+    // カード画像を作成
+    const cardImg = document.createElement('img');
+    cardImg.src = dealerCard.image;
+    cardImg.alt = `${dealerCard.value} of ${dealerCard.suit}`;
+    dealerCardDiv.appendChild(cardImg);
+}
+
+// カードを選択する関数（必要に応じて実装）
+function selectCard(cardImg) {
+    // カードが選択されたときの処理
+    console.log('Card selected:', cardImg.dataset.value, cardImg.dataset.suit);
+}
+
+
+// ディーラーの手札から1枚を場に出す
 
 //カード表示
 //カード選択
@@ -71,8 +118,32 @@ function selectBacks(cardElement){
 }
 
 //宣言
+
 //カードを表に
+
 //結果
+if (card < trump[trump_n]) {//賭けカードが、伏せカードより大きい場合
+    if (Hi_L === 0){ Result = "　LOWを選んで、あなたの<span style='background:blue;'>『 負け 』</span>";}
+    if (Hi_L === 1){ Result = "　HIGHを選んで、あなたの<span style='background:red;'>【 勝ち 】</span>";}
+}
+
+else if (card > trump[trump_n]) {//賭けカードが、伏せカードより小さい場合
+    if (Hi_L === 0){ Result = "　LOWを選んで、あなたの<span style='background:red;'>【 勝ち 】</span>";}
+    if (Hi_L === 1){ Result = "　HIGHを選んで、あなたの<span style='background:blue;'>『 負け 』</span>";}
+}
+
+else {Result = "引き分け！！";}
+
+    document.getElementById("Card_img_After").src="s_" + trump_n + ".jpg";
+
+document.getElementById("After").innerHTML ="伏せカードは" + trump[trump_n] + Result + "<br />次のカードが今の数字より高いか低いか考えてみよう！";
+document.getElementById("Before").innerHTML ="場にあるカードは" + card ;
+
+card = trump[trump_n];//場にあるカードを新しく引いたカードに変える
+
+
+
+
 //連勝を追加
 //ドローなら山札を追加
 

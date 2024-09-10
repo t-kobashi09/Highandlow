@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighandLow </title>
+    <title>HighandLow</title>
     <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
@@ -11,36 +11,40 @@
     <div id="game">
         <div>
             <button id="high">High</button>
-            <div id = "ga"></div>
+            <div id="ga"></div>
             <button id="low">Low</button>
         </div>
     </div>
     <p id="result"></p>
     <!--先生プログラム-->
-    <div class="container"></div>
+    <div class="container">
         <h1>カードゲーム</h1>
         <button id="draw-deck" onclick="drawCards()">山札を引く</button>
 
         <div id="card-area">
             <h2>引いたカード:</h2>
+            <div id="dealer-drawn-cards"></div>
+            <div id="dealer-card"></div>
+
+            <div id="selected-cards-area">
+                <h2>選択したカード:</h2>
+                <div id="selected-cards"></div>
+            </div>
+
             <div id="drawn-cards"></div>
+           
         </div>
 
-        <div id="selected-cards-area">
-            <h2>選択したカード:</h2>
-            <div id="selected-cards"></div>
-        </div>
+       
 
-        <div id="totals-area"></div>
-        <h2>スートごとの合計値:</h2>
-        <p>ハート: <span id="hearts-total">0</span></p>
-        <p>ダイヤ: <span id="diamonds-total">0</span></p>
-        <p>クラブ: <span id="clubs-total">0</span></p>
-        <p>スペード: <span id="spades-total">0</span></p>
+        <div id="totals-area">
+            <h2>スートごとの合計値:</h2>
+            <p>ハート: <span id="hearts-total">0</span></p>
+            <p>ダイヤ: <span id="diamonds-total">0</span></p>
+            <p>クラブ: <span id="clubs-total">0</span></p>
+            <p>スペード: <span id="spades-total">0</span></p>
         </div>
     </div>
-
-    
 
     <script src="../js/index.js"></script>
 </body>
