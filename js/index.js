@@ -102,11 +102,13 @@ function selectCard(cardImg) {
 // カードを選択してリストに追加、場から削除
 function selectCard(cardElement) {
     const selectedCardsDiv = document.getElementById('selected-cards');
-    const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
+    const clonedCard = cardElement.cloneNode(true); 
+    clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
     selectedCardsDiv.appendChild(clonedCard);
 
     // 場から選択されたカードを削除
     cardElement.remove();
+<<<<<<< Updated upstream
 
 }
 
@@ -115,6 +117,20 @@ function selectCard(cardElement) {
 
 
 
+=======
+}
+function returnCard(cardElement) {
+    const drawnCardsDiv = document.getElementById('drawn-cards'); 
+    const clonedCard = cardElement.cloneNode(true); 
+    clonedCard.onclick = function() { selectCard(clonedCard); }; // クリックしたらカードを選択できるように設定
+    drawnCardsDiv.appendChild(clonedCard);
+
+    // 選択済みカードリストからカードを削除
+    cardElement.remove();
+}
+
+
+>>>>>>> Stashed changes
 //宣言
 
 //カードを表に
