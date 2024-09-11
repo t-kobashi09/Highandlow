@@ -106,20 +106,49 @@ function selectCard(cardElement) {
     clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
     selectedCardsDiv.appendChild(clonedCard);
 
-    // 場から選択されたカードを削除
+    // 場から選択されたカードを削除できない
     cardElement.remove();
+
+    // ディーラーが自動的に裏向きのカードを場に出す処理
+    dealerAutoMove();
 }
+
+function dealerAutoMove() {
+    // ディーラーの手札が空でないか確認
+    if (dealerHand.length === 0) {
+        console.error("ディーラーの手札は空です");
+        return;
+    }
+
+    // ディーラーのカードを1枚裏向きで出す
+    const dealerSelectedDiv = document.getElementById('dealer-selected-cards');
+    const dealerCard = dealerHand.shift(); // 手札から1枚引く
+    const backImg = document.createElement('img');
+    backImg.src = "https://deckofcardsapi.com/static/img/back.png"; // 裏向きの画像
+    backImg.alt = "Dealer's card";
+    dealerSelectedDiv.appendChild(backImg);
+
+    //選択済みカードリストからカードを削除
+    cardElement.remove();
+
+    if (dealerDrawnCardsDiv.children.length > 0) {
+        dealerDrawnCardsDiv.removeChild(dealerDrawnCardsDiv.children[0]);
+    }
+
+}
+
 function returnCard(cardElement) {
     const drawnCardsDiv = document.getElementById('drawn-cards'); 
     const clonedCard = cardElement.cloneNode(true); 
     clonedCard.onclick = function() { selectCard(clonedCard); }; // クリックしたらカードを選択できるように設定
     drawnCardsDiv.appendChild(clonedCard);
 
-    // 選択済みカードリストからカードを削除
+    //選択済みカードリストからカードを削除
     cardElement.remove();
 }
 
 //宣言
+
 
 //カードを表に
 
