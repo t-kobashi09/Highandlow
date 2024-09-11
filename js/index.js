@@ -102,12 +102,12 @@ function selectCard(cardImg) {
 // カードを選択してリストに追加、場から削除
 function selectCard(cardElement) {
     const selectedCardsDiv = document.getElementById('selected-cards');
-    const clonedCard = cardElement.cloneNode(true); 
-    clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
+    const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
     selectedCardsDiv.appendChild(clonedCard);
 
     // 場から選択されたカードを削除できない
     cardElement.remove();
+
 
     // ディーラーが自動的に裏向きのカードを場に出す処理
     dealerAutoMove();
@@ -145,7 +145,24 @@ function returnCard(cardElement) {
 
     //選択済みカードリストからカードを削除
     cardElement.remove();
+
 }
+
+function selectCard(cardElement) {
+    const selectedCardsDiv = document.getElementById('selected-cards');
+    const clonedCard = cardElement.cloneNode(true); // カードを選択リストに追加
+    selectedCardsDiv.appendChild(clonedCard);
+
+    // 場から選択されたカードを削除
+    cardElement.remove();
+
+}
+
+
+
+
+
+
 
 //宣言
 
