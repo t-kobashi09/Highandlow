@@ -153,29 +153,29 @@ function returnCard(cardElement) {
 //カードを表に
 
 //結果
-if (card < trump[trump_n]) {//賭けカードが、伏せカードより大きい場合
-    if (Hi_L === 0){ Result = "　LOWを選んで、あなたの<span style='background:blue;'>『 負け 』</span>";}
-    if (Hi_L === 1){ Result = "　HIGHを選んで、あなたの<span style='background:red;'>【 勝ち 】</span>";}
-}
+const selectedCard = document.querySelector('#selected-cards img');
+            if (selectedCard) {
+                const playerCardValue = getCardValue(selectedCard.dataset.value);
+                const dealerCardValue = getCardValue(dealerCard.value);
 
-else if (card > trump[trump_n]) {//賭けカードが、伏せカードより小さい場合
-    if (Hi_L === 0){ Result = "　LOWを選んで、あなたの<span style='background:red;'>【 勝ち 】</span>";}
-    if (Hi_L === 1){ Result = "　HIGHを選んで、あなたの<span style='background:blue;'>『 負け 』</span>";}
-}
+                // 勝敗判定
+                if (playerCardValue > dealerCardValue) {
+                    document.getElementById('result').textContent = "勝ち！";
+                    totalWins++;
+                } else if (playerCardValue < dealerCardValue) {
+                    document.getElementById('result').textContent = "負け...";
+                    totalWins = 0; // 連勝をリセット
+                } else {
+                    document.getElementById('result').textContent = "引き分け";
+                }
 
-else {Result = "引き分け！！";}
-
-    document.getElementById("Card_img_After").src="s_" + trump_n + ".jpg";
-
-document.getElementById("After").innerHTML ="伏せカードは" + trump[trump_n] + Result + "<br />次のカードが今の数字より高いか低いか考えてみよう！";
-document.getElementById("Before").innerHTML ="場にあるカードは" + card ;
-
-card = trump[trump_n];//場にあるカードを新しく引いたカードに変える
-
-
+                console.log(`連勝: ${totalWins}`);
+            }
+        
 
 
 //連勝を追加
+
 //ドローなら山札を追加
 
 
