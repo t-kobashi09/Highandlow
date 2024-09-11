@@ -1,15 +1,14 @@
 let deckId;
 let dealerHand = [];
 let playerHand = [];
-let score = 0;
-let totalHearts = 0;
-let totalDiamonds = 0;
-let totalClubs = 0;
-let totalSpades = 0;
+let totalWins = 0;
+let dealerCardSelected = false; // ディーラーがカードを選択したかどうかのフラグ
+let playerCardSelected = false; // プレイヤーがカードを選択したかどうかのフラグ
+let selectedPlayerCard = null; // 選択されたプレイヤーのカード
 
-//スタート画面
+// スタート画面
 
-//シャッフル機能
+// シャッフル機能
 const deckApiUrl = "https://deckofcardsapi.com/api/deck";
 
 // ゲーム開始時にデッキを取得
@@ -18,15 +17,30 @@ window.onload = () => {
         .then(response => response.json())
         .then(data => {
             deckId = data.deck_id;
-        });
+        })
+        .catch(error => console.error('Error initializing deck:', error));
+
+    // ボタンのイベントリスナーを追加
+    document.getElementById('high-button').addEventListener('click', () => evaluateResult(true));
+    document.getElementById('low-button').addEventListener('click', () => evaluateResult(false));
 };
-//10渡す機能
+
+// 10渡す機能
 // 山札からカードを引く
 // カードを引く関数
 function drawCards() {
     fetch(`${deckApiUrl}/${deckId}/draw/?count=20`)  // 20枚引く
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            if (!data.cards || data.cards.length < 20) {
+                throw new Error('Not enough cards returned from API');
+            }
+
             const drawnCardsDiv = document.getElementById('drawn-cards');
             drawnCardsDiv.innerHTML = ''; // 前回の表示をクリア
 
@@ -46,7 +60,6 @@ function drawCards() {
                 cardImg.onclick = () => selectCard(cardImg);
 
                 drawnCardsDiv.appendChild(cardImg);
-                
             });
 
             // ディーラーのカードを裏向きで表示
@@ -88,29 +101,32 @@ function revealDealerCard() {
     dealerCardDiv.appendChild(cardImg);
 }
 
-// カードを選択する関数（必要に応じて実装）
+// カードを選択する関数
 function selectCard(cardImg) {
+    if (playerCardSelected) {
+        alert("すでにカードが選択されています。カードを変更するには、選択済みのカードを戻してください。");
+        return;
+    }
+
     // カードが選択されたときの処理
     console.log('Card selected:', cardImg.dataset.value, cardImg.dataset.suit);
-}
 
-
-// ディーラーの手札から1枚を場に出す
-
-//カード表示
-//カード選択
-// カードを選択してリストに追加、場から削除
-function selectCard(cardElement) {
     const selectedCardsDiv = document.getElementById('selected-cards');
-    const clonedCard = cardElement.cloneNode(true); 
+    const clonedCard = cardImg.cloneNode(true);
     clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
     selectedCardsDiv.appendChild(clonedCard);
 
-    // 場から選択されたカードを削除できない
-    cardElement.remove();
+    // 場から選択されたカードを削除
+    cardImg.remove();
+
+    // プレイヤーのカード選択を記録
+    playerCardSelected = true;
+    selectedPlayerCard = clonedCard;
 
     // ディーラーが自動的に裏向きのカードを場に出す処理
-    dealerAutoMove();
+    if (!dealerCardSelected) {
+        dealerAutoMove();
+    }
 }
 
 function dealerAutoMove() {
@@ -126,63 +142,75 @@ function dealerAutoMove() {
     const backImg = document.createElement('img');
     backImg.src = "https://deckofcardsapi.com/static/img/back.png"; // 裏向きの画像
     backImg.alt = "Dealer's card";
+    backImg.dataset.value = dealerCard.value;
+    backImg.dataset.suit = dealerCard.suit;
+    backImg.dataset.code = dealerCard.code;
     dealerSelectedDiv.appendChild(backImg);
 
-    //選択済みカードリストからカードを削除
-    cardElement.remove();
-
+    // ディーラーの手札から表示済みカードを削除
+    const dealerDrawnCardsDiv = document.getElementById('dealer-drawn-cards');
     if (dealerDrawnCardsDiv.children.length > 0) {
         dealerDrawnCardsDiv.removeChild(dealerDrawnCardsDiv.children[0]);
     }
 
+    // ディーラーがカードを選択したことを記録
+    dealerCardSelected = true;
 }
 
 function returnCard(cardElement) {
-    const drawnCardsDiv = document.getElementById('drawn-cards'); 
-    const clonedCard = cardElement.cloneNode(true); 
+    const drawnCardsDiv = document.getElementById('drawn-cards');
+    const clonedCard = cardElement.cloneNode(true);
     clonedCard.onclick = function() { selectCard(clonedCard); }; // クリックしたらカードを選択できるように設定
     drawnCardsDiv.appendChild(clonedCard);
 
-    //選択済みカードリストからカードを削除
+    // 選択済みカードリストからカードを削除
     cardElement.remove();
+
+    // プレイヤーのカード選択をリセット
+    playerCardSelected = false;
+    selectedPlayerCard = null;
 }
-
-//宣言
-
-
-//カードを表に
-
-//結果
-const selectedCard = document.querySelector('#selected-cards img');
-            if (selectedCard) {
-                const playerCardValue = getCardValue(selectedCard.dataset.value);
-                const dealerCardValue = getCardValue(dealerCard.value);
-
-                // 勝敗判定
-                if (playerCardValue > dealerCardValue) {
-                    document.getElementById('result').textContent = "勝ち！";
-                    totalWins++;
-                } else if (playerCardValue < dealerCardValue) {
-                    document.getElementById('result').textContent = "負け...";
-                    totalWins = 0; // 連勝をリセット
-                } else {
-                    document.getElementById('result').textContent = "引き分け";
-                }
-
-                console.log(`連勝: ${totalWins}`);
-            }
-        
-
-
-//連勝を追加
-
-//ドローなら山札を追加
-
-
 
 // カードの値を数値に変換する
 function getCardValue(value) {
     if (value === 'ACE') return 1;
     if (value === 'JACK' || value === 'QUEEN' || value === 'KING') return 10;
     return parseInt(value);
+}
+
+// 結果判定の関数
+function evaluateResult(isHigh) {
+    const dealerSelectedDiv = document.getElementById('dealer-selected-cards');
+    const dealerCardElement = dealerSelectedDiv.querySelector('img');
+
+    if (!selectedPlayerCard || !dealerCardElement) {
+        alert("プレイヤーのカードまたはディーラーのカードが選択されていません。");
+        return;
+    }
+
+    const playerCardValue = getCardValue(selectedPlayerCard.dataset.value);
+    const dealerCardValue = getCardValue(dealerCardElement.dataset.value);
+
+    // ディーラーのカードを表向きにする
+    console.log(`ディーラーカードバリュー${dealerCardElement.dataset.value}`);
+    console.log(`ディーラーカードスイート${dealerCardElement.dataset.suit}`);
+    console.log();
+    dealerCardElement.src = `https://deckofcardsapi.com/static/img/${dealerCardElement.dataset.code}.png`;
+
+    // 勝敗判定
+    let result;
+    if (isHigh) {
+        result = playerCardValue > dealerCardValue ? "勝ち！" : (playerCardValue < dealerCardValue ? "負け..." : "引き分け");
+    } else {
+        result = playerCardValue < dealerCardValue ? "勝ち！" : (playerCardValue > dealerCardValue ? "負け..." : "引き分け");
+    }
+
+    if (result === "勝ち！") {
+        totalWins++;
+    } else if (result === "負け...") {
+        totalWins = 0; // 連勝をリセット
+    }
+
+    document.getElementById('result').textContent = result;
+    console.log(`連勝: ${totalWins}`);
 }
