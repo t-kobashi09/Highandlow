@@ -298,3 +298,4 @@ function setupNewGameOnClick() {
         window.location.href = 'index.html'; // トップページのURLに変更してください
     });
 }
+

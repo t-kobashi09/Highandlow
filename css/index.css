@@ -13,17 +13,45 @@
   height: 50vh;              
 }
 
-/* トランプカードのサイズを調整 */
+/* トランプカードのサイズを調整しています */
 #drawn-cards img,
 #dealer-drawn-cards img,
 #dealer-card img,
 #dealer-selected-cards img,
 #selected-cards img {
-    width: 100px; 
+    width: 50px; 
     height: auto; 
-    margin: 5px; 
+    margin: 5px;
+}
+/*HiGHとLOWを横並びにしています*/
+
+#game {
+  display: flex;             
+  justify-content: center;   
+  gap: 30px;                  
+  margin-top: 10px;           
 }
 
+/* ボタンのスタイルを調整しています */
+#high-button, #low-button {
+  padding: 10px 20px;         
+  font-size: 16px;           
+  font-weight: bold;          
+  cursor: pointer;           
+  background-color: #f0f0f0;  
+  border: none;               
+  border-radius: 5px;         
+  transition: background-color 0.3s; 
+}
+/*highボタン色*/
+#high-button {
+  background-color: #fc0606;  
+}
+
+/* LOWボタン色 */
+#low-button {
+  background-color: #0206fc;  
+}
 
 
 html {

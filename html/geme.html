@@ -8,17 +8,11 @@
 </head>
 <body>
     <h1>HighandLow</h1>
-    <div id="game">
-        <div>
-            <button id="high-button">High</button>
-            <div id="ga"></div>
-            <button id="low-button">Low</button>
-        </div>
-    </div>
+    
     <p id="result"></p>
     <!--先生プログラム-->
     <div class="container">
-        <h1>カードゲーム</h1>
+    
         <button id="draw-deck" onclick="drawCards()">山札を引く</button>
 
         <div id="card-area">
@@ -28,6 +22,14 @@
 
             <h2>ディーラーが場に出したカード:</h2>
             <div id="dealer-selected-cards"></div>
+            <!--high lowボタン-->
+            <div id="game">
+                <div>
+                    <button id="high-button">High</button>
+                    
+                    <button id="low-button">Low</button>
+                </div>
+            </div>
 
             <div id="selected-cards-area"></div>
                 <h2>選択したカード:</h2>
@@ -43,12 +45,7 @@
 
 
         <div id="totals-area">
-            <h2>スートごとの合計値:</h2>
-            <p>ハート: <span id="hearts-total">0</span></p>
-            <p>ダイヤ: <span id="diamonds-total">0</span></p>
-            <p>クラブ: <span id="clubs-total">0</span></p>
-            <p>スペード: <span id="spades-total">0</span></p>
-
+           
         </div>
     </div>
 
