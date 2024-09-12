@@ -25,14 +25,9 @@ window.onload = () => {
 // 山札からカードを引く関数
 function drawCards() {
     fetch(`${deckApiUrl}/${deckId}/draw/?count=20`) // 20枚引く
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            if (!data.cards || data.cards.length < 20) {
+            if (data.cards.length < 20) {
                 throw new Error('Not enough cards returned from API');
             }
 
@@ -65,7 +60,7 @@ function drawCards() {
 
 // ディーラーのカードを表示する関数
 function revealDealerCard() {
-    if (!dealerHand || dealerHand.length === 0) {
+    if (dealerHand.length === 0) {
         console.error('No cards available in dealerHand');
         return;
     }
@@ -95,7 +90,7 @@ function selectCard(cardImg) {
 
     const selectedCardsDiv = document.getElementById('selected-cards');
     const clonedCard = cardImg.cloneNode(true);
-    clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
+    clonedCard.onclick = function() { returnCard(clonedCard); };
     selectedCardsDiv.appendChild(clonedCard);
 
     cardImg.remove();
@@ -135,7 +130,7 @@ function dealerAutoMove() {
 function returnCard(cardElement) {
     const drawnCardsDiv = document.getElementById('drawn-cards');
     const clonedCard = cardElement.cloneNode(true);
-    clonedCard.onclick = function() { selectCard(clonedCard); }; // クリックしたらカードを選択できるように設定
+    clonedCard.onclick = function() { selectCard(clonedCard); };
     drawnCardsDiv.appendChild(clonedCard);
 
     cardElement.remove();
@@ -175,16 +170,14 @@ function evaluateResult(isHigh) {
 
     if (result === "勝ち！") {
         totalWins++;
-        discardPlayedCards();
-        // 勝ち時に次のラウンドを開始する
+        discardPlayedCards(); // 勝利時にカードを捨てる
         setTimeout(startNextRound, 1000); // 1秒待ってから次のラウンドを開始
     } else if (result === "負け...") {
         totalWins = 0;
-        // ゲームオーバーの場合、クリックでトップページに戻る処理
         isGameOver = true;
-        setupNewGameOnClick();
+        setupNewGameOnClick(); // ゲームオーバー時、トップページに戻る
     } else {
-        handleDraw();
+        handleDraw(); // 引き分け時は追加でカードを引く
     }
 
     document.getElementById('result').textContent = result;
@@ -192,8 +185,8 @@ function evaluateResult(isHigh) {
 }
 
 function handleDraw() {
-    discardPlayedCards();
-    drawAdditionalCards();
+    discardPlayedCards(); // 引き分け時にもカードを捨てる
+    drawAdditionalCards(); // 追加カードを引く
 }
 
 function discardPlayedCards() {
@@ -201,7 +194,7 @@ function discardPlayedCards() {
     if (playerSelectedCard) {
         const playerIndex = playerHand.findIndex(card => card.code === playerSelectedCard.dataset.code);
         if (playerIndex > -1) {
-            playerHand.splice(playerIndex, 1);
+            playerHand.splice(playerIndex, 1); // プレイヤーの手札から削除
         }
     }
 
@@ -210,24 +203,20 @@ function discardPlayedCards() {
     if (dealerCardElement) {
         const dealerIndex = dealerHand.findIndex(card => card.code === dealerCardElement.dataset.code);
         if (dealerIndex > -1) {
-            dealerHand.splice(dealerIndex, 1);
+            dealerHand.splice(dealerIndex, 1); // ディーラーの手札から削除
         }
     }
 
+    // 選択されたカードを表示から消す
     document.getElementById('selected-cards').innerHTML = '';
     document.getElementById('dealer-selected-cards').innerHTML = '';
 }
 
 function drawAdditionalCards() {
-    fetch(`${deckApiUrl}/${deckId}/draw/?count=2`) // プレイヤーとディーラーにそれぞれ1枚ずつ引く
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    fetch(`${deckApiUrl}/${deckId}/draw/?count=2`)
+        .then(response => response.json())
         .then(data => {
-            if (!data.cards || data.cards.length < 2) {
+            if (data.cards.length < 2) {
                 throw new Error('Not enough cards returned from API');
             }
 
@@ -241,61 +230,22 @@ function drawAdditionalCards() {
             playerCardImg.dataset.code = newPlayerCard.code;
             playerCardImg.onclick = () => selectCard(playerCardImg);
             drawnCardsDiv.appendChild(playerCardImg);
-            playerHand.push(newPlayerCard); // プレイヤーの手札に追加
 
-            const dealerDrawnCardsDiv = document.getElementById('dealer-drawn-cards');
-            const dealerCardBackImg = document.createElement('img');
-            dealerCardBackImg.src = "https://deckofcardsapi.com/static/img/back.png";
-            dealerDrawnCardsDiv.appendChild(dealerCardBackImg);
-            dealerHand.push(data.cards[1]); // ディーラーの手札に追加
+            playerHand.push(newPlayerCard);
 
-            playerCardSelected = false;
-            dealerCardSelected = false;
-            selectedPlayerCard = null;
-
-            if (!isGameOver) {
-                startNextRound();
-            }
+            const newDealerCard = data.cards[1];
+            dealerHand.push(newDealerCard);
         })
         .catch(error => console.error('Error drawing additional cards:', error));
 }
 
 function startNextRound() {
-    if (playerHand.length === 0 || dealerHand.length === 0) {
-        alert("手札がありません。ゲームを終了します。");
-        return;
-    }
-
-    const drawnCardsDiv = document.getElementById('drawn-cards');
-    drawnCardsDiv.innerHTML = '';
-
-    playerHand.forEach(card => {
-        const cardImg = document.createElement('img');
-        cardImg.src = card.image;
-        cardImg.alt = `${card.value} of ${card.suit}`;
-        cardImg.dataset.value = card.value;
-        cardImg.dataset.suit = card.suit;
-        cardImg.dataset.code = card.code;
-        cardImg.onclick = () => selectCard(cardImg);
-        drawnCardsDiv.appendChild(cardImg);
-    });
-
-    const dealerDrawnCardsDiv = document.getElementById('dealer-drawn-cards');
-    dealerDrawnCardsDiv.innerHTML = '';
-    dealerHand.forEach(() => {
-        const backImg = document.createElement('img');
-        backImg.src = "https://deckofcardsapi.com/static/img/back.png";
-        dealerDrawnCardsDiv.appendChild(backImg);
-    });
-
     playerCardSelected = false;
     dealerCardSelected = false;
-    selectedPlayerCard = null;
 }
 
 function setupNewGameOnClick() {
-    document.getElementById('result').addEventListener('click', () => {
-        window.location.href = 'index.html'; // トップページのURLに変更してください
-    });
+    setTimeout(function () {
+        window.location.href = 'C:/Users/k-touya/Documents/HighandLow/html/index.html'; // index.htmlにリダイレクト
+    }, 2000);
 }
-
