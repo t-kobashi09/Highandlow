@@ -54,9 +54,14 @@ function drawCards() {
                 backImg.src = "https://deckofcardsapi.com/static/img/back.png";
                 dealerDrawnCardsDiv.appendChild(backImg);
             });
+
+            // カードを正常に引いた後、ボタンを無効化
+            const drawButton = document.getElementById('draw-deck');
+            drawButton.disabled = true;
         })
         .catch(error => console.error('Error drawing cards:', error));
 }
+
 
 // ディーラーのカードを表示する関数
 function revealDealerCard() {
@@ -171,7 +176,7 @@ function evaluateResult(isHigh) {
     if (result === "勝ち！") {
         totalWins++;
         discardPlayedCards(); // 勝利時にカードを捨てる
-        setTimeout(startNextRound, 1000); // 1秒待ってから次のラウンドを開始
+        setTimeout(startNextRound, 5000); // 1秒待ってから次のラウンドを開始
     } else if (result === "負け...") {
         totalWins = 0;
         isGameOver = true;
