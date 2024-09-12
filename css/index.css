@@ -4,6 +4,26 @@
   -webkit-box-sizing: inherit;
   box-sizing: inherit;
 }
+/*諏訪作業*/
+/*ゲームスタートを中央にしています*/
+#geme { 
+  display: flex;              
+  justify-content: center;    
+  align-items: center;        
+  height: 50vh;              
+}
+
+/* トランプカードのサイズを調整 */
+#drawn-cards img,
+#dealer-drawn-cards img,
+#dealer-card img,
+#dealer-selected-cards img,
+#selected-cards img {
+    width: 100px; 
+    height: auto; 
+    margin: 5px; 
+}
+
 
 
 html {
