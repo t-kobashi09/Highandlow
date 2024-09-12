@@ -97,21 +97,12 @@ function selectCard(cardImg) {
     const clonedCard = cardImg.cloneNode(true);
     clonedCard.onclick = function() { returnCard(clonedCard); }; // クリックしたらカードを戻すように設定
     selectedCardsDiv.appendChild(clonedCard);
-<<<<<<< HEAD
-    // 場から選択されたカードを削除
-=======
 
->>>>>>> 2a0e54834e9bf93f5d15f00ca9c862a548b9d907
     cardImg.remove();
 
     playerCardSelected = true;
     selectedPlayerCard = clonedCard;
 
-<<<<<<< HEAD
-
-    // ディーラーが自動的に裏向きのカードを場に出す処理
-=======
->>>>>>> 2a0e54834e9bf93f5d15f00ca9c862a548b9d907
     if (!dealerCardSelected) {
         dealerAutoMove();
     }
@@ -149,14 +140,10 @@ function returnCard(cardElement) {
 
     cardElement.remove();
 
-<<<<<<< HEAD
-// カードの値を数値に変換する
-=======
     playerCardSelected = false;
     selectedPlayerCard = null;
 }
 
->>>>>>> 2a0e54834e9bf93f5d15f00ca9c862a548b9d907
 function getCardValue(value) {
     if (value === 'ACE') return 14;
     if (value === 'KING') return 13;
@@ -203,8 +190,6 @@ function evaluateResult(isHigh) {
     document.getElementById('result').textContent = result;
     console.log(`連勝: ${totalWins}`);
 }
-<<<<<<< HEAD
-=======
 
 function handleDraw() {
     discardPlayedCards();
@@ -312,5 +297,4 @@ function setupNewGameOnClick() {
     document.getElementById('result').addEventListener('click', () => {
         window.location.href = 'index.html'; // トップページのURLに変更してください
     });
->>>>>>> 2a0e54834e9bf93f5d15f00ca9c862a548b9d907
 }
